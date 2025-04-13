@@ -14,9 +14,7 @@ export type Turno = {
 // Función para obtener todos los turnos
 export const getTurnos = async (): Promise<Turno[]> => {
   try {
-    // Verificar si estamos en modo de desarrollo
     if (process.env.NODE_ENV === "development" && !process.env.NEXT_PUBLIC_SUPABASE_URL) {
-      // Datos de ejemplo para desarrollo
       return [
         {
           id: 1,
@@ -31,7 +29,7 @@ export const getTurnos = async (): Promise<Turno[]> => {
           id: 2,
           nombre: "María López",
           telefono: "11 9876 5432",
-          servicio: "Alineación y balanceo",
+          servicio: "Distribucion",
           fecha: new Date(2025, 3, 10, 14, 30),
           estado: "pendiente",
         },
@@ -47,23 +45,22 @@ export const getTurnos = async (): Promise<Turno[]> => {
       ]
     }
 
-    // En producción, usar Supabase
     const { data, error } = await supabase.from("turnos").select("*").order("fecha", { ascending: true })
 
     if (error) throw error
-    return data || []
+    return (data || []).map((turno) => ({
+      ...turno,
+      estado: turno.estado as "pendiente" | "confirmado" | "cancelado",
+    }))
   } catch (error) {
     console.error("Error al obtener turnos:", error)
     return []
   }
 }
 
-// Función para obtener turnos por fecha
 export const getTurnosByFecha = async (fecha: Date): Promise<Turno[]> => {
   try {
-    // Verificar si estamos en modo de desarrollo
     if (process.env.NODE_ENV === "development" && !process.env.NEXT_PUBLIC_SUPABASE_URL) {
-      // Filtrar datos de ejemplo
       const turnos = await getTurnos()
       return turnos.filter((turno) => {
         const turnoDate = new Date(turno.fecha)
@@ -75,14 +72,12 @@ export const getTurnosByFecha = async (fecha: Date): Promise<Turno[]> => {
       })
     }
 
-    // Formatear fecha para la consulta
     const fechaInicio = new Date(fecha)
     fechaInicio.setHours(0, 0, 0, 0)
 
     const fechaFin = new Date(fecha)
     fechaFin.setHours(23, 59, 59, 999)
 
-    // En producción, usar Supabase
     const { data, error } = await supabase
       .from("turnos")
       .select("*")
@@ -91,40 +86,36 @@ export const getTurnosByFecha = async (fecha: Date): Promise<Turno[]> => {
       .order("fecha", { ascending: true })
 
     if (error) throw error
-    return data || []
+    return (data || []).map((turno) => ({
+      ...turno,
+      estado: turno.estado as "pendiente" | "confirmado" | "cancelado",
+    }))
   } catch (error) {
     console.error("Error al obtener turnos por fecha:", error)
     return []
   }
 }
 
-// Función para obtener un turno por ID
 export const getTurnoById = async (id: number): Promise<Turno | null> => {
   try {
-    // Verificar si estamos en modo de desarrollo
     if (process.env.NODE_ENV === "development" && !process.env.NEXT_PUBLIC_SUPABASE_URL) {
-      // Buscar en datos de ejemplo
       const turnos = await getTurnos()
       return turnos.find((turno) => turno.id === id) || null
     }
 
-    // En producción, usar Supabase
     const { data, error } = await supabase.from("turnos").select("*").eq("id", id).single()
 
     if (error) throw error
-    return data
+    return data ? { ...data, estado: data.estado as Turno["estado"] } : null
   } catch (error) {
     console.error("Error al obtener turno por ID:", error)
     return null
   }
 }
 
-// Función para crear un nuevo turno
 export const crearTurno = async (turno: Omit<Turno, "id">): Promise<Turno> => {
   try {
-    // Verificar si estamos en modo de desarrollo
     if (process.env.NODE_ENV === "development" && !process.env.NEXT_PUBLIC_SUPABASE_URL) {
-      // Simular creación en datos de ejemplo
       const turnos = await getTurnos()
       const nuevoId = Math.max(0, ...turnos.map((t) => t.id)) + 1
       const nuevoTurno = { ...turno, id: nuevoId }
@@ -132,10 +123,9 @@ export const crearTurno = async (turno: Omit<Turno, "id">): Promise<Turno> => {
       return nuevoTurno as Turno
     }
 
-    // En producción, convertir la fecha y usar Supabase
     const turnoAEnviar = {
       ...turno,
-      fecha: new Date(turno.fecha).toISOString(), // 👈 conversión necesaria
+      fecha: new Date(turno.fecha).toISOString(),
     }
 
     const { data, error } = await supabase
@@ -155,26 +145,21 @@ export const crearTurno = async (turno: Omit<Turno, "id">): Promise<Turno> => {
   }
 }
 
-// Función para actualizar un turno
 export const actualizarTurno = async (id: number, datos: Partial<Turno>): Promise<Turno | null> => {
   try {
-    // Verificar si estamos en modo de desarrollo
     if (process.env.NODE_ENV === "development" && !process.env.NEXT_PUBLIC_SUPABASE_URL) {
-      // Simular actualización en datos de ejemplo
       const turnos = await getTurnos()
       const index = turnos.findIndex((t) => t.id === id)
       if (index === -1) return null
 
       const turnoActualizado = { ...turnos[index], ...datos }
-      // En un entorno real, aquí actualizaríamos en la base de datos
       console.log("Turno actualizado (simulación):", turnoActualizado)
       return turnoActualizado
     }
 
-    // En producción, usar Supabase
     const datosAActualizar = {
       ...datos,
-      fecha: datos.fecha ? new Date(datos.fecha).toISOString() : undefined, // 👈 Solo si se pasa `fecha`, se convierte
+      fecha: datos.fecha ? new Date(datos.fecha).toISOString() : undefined,
     }
 
     const { data, error } = await supabase
@@ -192,22 +177,17 @@ export const actualizarTurno = async (id: number, datos: Partial<Turno>): Promis
   }
 }
 
-// Función para eliminar un turno
 export const eliminarTurno = async (id: number): Promise<Turno | null> => {
   try {
-    // Verificar si estamos en modo de desarrollo
     if (process.env.NODE_ENV === "development" && !process.env.NEXT_PUBLIC_SUPABASE_URL) {
-      // Simular eliminación en datos de ejemplo
       const turnos = await getTurnos()
       const turno = turnos.find((t) => t.id === id)
       if (!turno) return null
 
-      // En un entorno real, aquí eliminaríamos de la base de datos
       console.log("Turno eliminado (simulación):", turno)
       return turno
     }
 
-    // En producción, usar Supabase
     const { data, error } = await supabase.from("turnos").delete().eq("id", id).select().single()
 
     if (error) throw error

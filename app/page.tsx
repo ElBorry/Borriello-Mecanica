@@ -25,7 +25,7 @@ export default function Home() {
                   <h2 className="text-2xl font-bold mb-4">Servicios Profesionales</h2>
                   <ul className="space-y-3">
                     <ServiceItem icon={Oil} text="Cambio de aceite y filtros" />
-                    <ServiceItem icon={Settings} text="Alineación y balanceo" />
+                    <ServiceItem icon={Settings} text="Distribucion" />
                     <ServiceItem icon={Tool} text="Diagnóstico computarizado" />
                     <ServiceItem icon={Wrench} text="Reparación de suspensión" />
                     <ServiceItem icon={Car} text="Mantenimiento general" />

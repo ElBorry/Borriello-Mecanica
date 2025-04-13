@@ -36,7 +36,7 @@ export default function ReservaPage() {
 
   const serviciosMecanica = [
     "Cambio de aceite",
-    "Alineación y balanceo",
+    "Distribucion",
     "Revisión general",
     "Diagnóstico por falla",
     "Colocación de repuestos",
@@ -255,7 +255,7 @@ export default function ReservaPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="whatsapp">Número de WhatsApp</Label>
+                  <Label htmlFor="whatsapp">Número de Telegram</Label>
                   <Input
                     id="whatsapp"
                     placeholder="Ej: 11 1234 5678"
