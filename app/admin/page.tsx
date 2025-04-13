@@ -23,7 +23,7 @@ import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { CalendarIcon, CheckCircle2, Clock, MessageSquare, Settings, User, Wrench, XCircle } from "lucide-react"
 import { getTurnos, actualizarTurno } from "@/lib/db"
-import { enviarConfirmacion, enviarCancelacion } from "@/lib/whatsapp"
+import { enviarConfirmacion, enviarRecordatorio, enviarCancelacion } from "@/lib/mensajeria"
 import type { Turno } from "@/lib/db"
 
 export default function AdminPage() {

@@ -20,7 +20,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { CheckCircle2 } from "lucide-react"
 import { crearTurno } from "@/lib/db"
-import { enviarConfirmacion } from "@/lib/whatsapp"
+import { enviarConfirmacion, enviarRecordatorio, enviarCancelacion } from "@/lib/mensajeria"
 
 export default function ReservaPage() {
   const router = useRouter()

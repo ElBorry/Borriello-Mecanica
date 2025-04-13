@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import { getTurnos, getTurnoById, crearTurno, actualizarTurno, eliminarTurno } from "@/lib/db"
-import { enviarConfirmacion } from "@/lib/whatsapp"
+import { enviarConfirmacion, enviarRecordatorio, enviarCancelacion } from "@/lib/mensajeria"
 
 // GET /api/turnos - Obtener todos los turnos
 export async function GET(request: Request) {
