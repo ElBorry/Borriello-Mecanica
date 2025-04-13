@@ -42,18 +42,18 @@ export const enviarCancelacion = async (turno: Turno) => {
 
 const enviarMensajeTelegram = async (mensaje: string) => {
     try {
-        const token = process.env.TELEGRAM_BOT_TOKEN
-        const chatId = process.env.TELEGRAM_ADMIN_ID
+        const botToken = process.env.NEXT_PUBLIC_TELEGRAM_BOT_TOKEN
+        const adminId = process.env.NEXT_PUBLIC_TELEGRAM_ADMIN_ID
 
-        if (!token || !chatId) {
+        if (!botToken || !adminId) {
             throw new Error("Faltan TELEGRAM_BOT_TOKEN o TELEGRAM_ADMIN_ID en el entorno.")
         }
 
-        const response = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+        const response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                chat_id: chatId,
+                chat_id: adminId,
                 text: mensaje,
                 parse_mode: "Markdown",
             }),
