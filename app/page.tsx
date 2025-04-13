@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import Link from "next/link"
 import { ArrowRight, Car, FuelIcon as Oil, Settings, PenToolIcon as Tool, Wrench } from "lucide-react"
+import Image from "next/image"
 
 export default function Home() {
   return (
@@ -39,11 +40,14 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="flex items-center justify-center">
-                  <div className="relative w-full aspect-square max-w-xs">
-                    <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent rounded-full blur-2xl"></div>
-                    <div className="relative bg-black/50 border border-secondary/30 rounded-full p-8 flex items-center justify-center">
-                      <Wrench className="h-32 w-32 text-primary" />
-                    </div>
+                  <div className="bg-black/60 p-4 rounded-full border border-secondary/20 shadow-md">
+                    <Image
+                      src="/logo-borriello.jpeg"
+                      alt="Logo Borriello"
+                      width={140}
+                      height={140}
+                      className="rounded-full object-contain"
+                    />
                   </div>
                 </div>
               </div>
